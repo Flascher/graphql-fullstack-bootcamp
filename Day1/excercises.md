@@ -1,7 +1,9 @@
 # Exercises Day1
+
 Install Hasura Console on local environment
 
 ### Prerequisites
+
 For running GraphQL Api locally [Install Docker](https://docs.docker.com/install/)
 
 then run `./run-hasura-locally.sh`
@@ -19,13 +21,14 @@ Access Hasura console on localhost:8080/console
 
 [Remote schemas docs](https://docs.hasura.io/1.0/graphql/manual/remote-schemas/index.html#step-2-merge-remote-schema)
 
-
 # Core principles
-
 
 # Syntax and query language
 
+Questions:
+
 1. What's wrong with this syntax?
+
 ```
 query {
   posts: {
@@ -36,25 +39,93 @@ query {
   }
 }
 ```
+
 2. How to execute graphql request as curl
 
+Answers:
 
-# Queries 
+1. The syntax shouldn't include colons (`:`) or commas (`,`) unless (generally) used in an argument. Also, `posts` doesn't contain a field `users` but does contain the field `user`.
+
+```
+query {
+  posts {
+    timestamp
+    user {
+      firstName
+    }
+  }
+}
+```
+
+2. The above query as a `curl` command would look like:
+
+```
+curl -X POST -H "Content-Type: application/json" --data '{"query": "{ posts { timestamp user { firstName } } }"}' http://localhost:8080/v1alpha1/graphql
+```
+
+# Queries
+
+Questions:
 
 3. Get first 5 planets in Star Wars universe along with their name, diameter, rotation period, residents. For each resident display it's name, species, classification and spoken language. Also for each resident display vehicles that he used as well as in which movies they appeared
 
+4) Get `subject` and `content` of `posts` ordered by `timestamp` ascending. Represent data as `ordered_posts` array
 
-4. Get `subject` and `content` of `posts` ordered by `timestamp` ascending. Represent data as `ordered_posts` array
-  
+Answers:
+
+3.
+
+```
+{
+  allPlanets(first: 5) {
+    planets {
+      name
+      diameter
+      rotationPeriod
+      residentConnection {
+        residents {
+          name
+          species {
+            name
+            classification
+            language
+          }
+          vehicleConnection {
+            vehicles {
+              name
+              filmConnection{
+                films {
+                  title
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+4.
+
+```
+{
+  ordered_posts: posts(order_by: { timestamp: asc }) {
+		subject
+    content
+  }
+}
+```
 
 # Mutations
 
 5. Add new blog post
 6. Add a new user using GraphQL Mutation
-7. Create reusable insert mutation called addPost, which not only will insert a post, but create new user and profile 
-   
+7. Create reusable insert mutation called addPost, which not only will insert a post, but create new user and profile
+
    > Hint: use variables
 
-
 # Subscriptions
+
 Return `n` most liked post where `n` can be provided from outside.
