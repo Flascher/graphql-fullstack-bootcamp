@@ -120,11 +120,59 @@ Answers:
 
 # Mutations
 
+Questions:
+
 5. Add new blog post
 6. Add a new user using GraphQL Mutation
 7. Create reusable insert mutation called addPost, which not only will insert a post, but create new user and profile
 
    > Hint: use variables
+
+Answers:
+
+5. 6.
+
+```
+mutation addProfile {
+  insert_profile(objects: [{
+    bio: "GraphQL bootcamper, Vue.js fan"
+  }]) {
+    returning {
+      id
+    }
+  }
+}
+
+mutation addUser {
+  insert_users(objects: [{
+  	firstName: "Alex"
+    lastName: "Flasch"
+    profileId: "cd24af27-efc1-41a8-9d43-40ee039bb43a"
+  }]) {
+    returning {
+      id
+    }
+  }
+}
+
+mutation addPost {
+  insert_posts(objects: [{
+    subject: "My First GraphQL Mutation"
+    content: "Hey this GraphQL thing is pretty nifty."
+    userId: "412968b4-7d3b-45e6-8890-f447b6d031fc"
+  }]) {
+    returning {
+      id
+    }
+  }
+}
+```
+
+7.
+
+```
+
+```
 
 # Subscriptions
 
