@@ -1,0 +1,29 @@
+query {
+  posts {
+    id
+    subject
+    content
+    timestamp
+    likes
+    user {
+      firstName
+      lastName
+      profile {
+        avatarUrl
+      }
+    }
+    comments {
+      id
+      message
+      timestamp
+      likes
+      user {
+        firstName
+        lastName
+        profile {
+          avatarUrl
+        }
+      }
+    }
+  }
+}
