@@ -1,0 +1,58 @@
+type Query {
+  posts: [Post!]!
+  post(id: ID!): Post
+  description: String!
+}
+
+type Mutation {
+  createDraft(object: Draft): Post
+  addComment(id: ID!, content: String!): ID
+  deletePost(id: ID!): Post
+  publish(id: ID!): Post
+}
+
+scalar Date
+
+input Draft {
+  title: String!
+  oddNumber: Odd,
+  content: String!
+  author: String!
+  date: Date
+}
+
+interface HasContent {
+  content: String!
+}
+
+type Subscription {
+  posts: [Post!]!
+}
+
+
+"Description for the type"
+type Post implements HasContent {
+  """
+    ## Description for field
+  """
+  id: ID!
+  oddNumber: Odd,
+  date: Date
+  title: String!
+  content: String!
+  published: Boolean!
+  author: Author!
+  comments: [Comment]
+}
+
+scalar Odd
+
+type Author {
+  id: ID!
+  name: String!
+}
+
+type Comment implements HasContent{
+  id: ID!
+  content: String!
+}
